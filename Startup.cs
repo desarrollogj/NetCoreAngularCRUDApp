@@ -33,6 +33,16 @@ namespace NetCoreAngularCRUDApp
             services.AddDbContext<NetCoreAngularCRUDAppContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("NetCoreAngularCRUDAppContext")));
 
+            // CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
+            // Dependency injection
             services.AddScoped<IBlogPostRepository, BlogPostRepository>();
             services.AddScoped<IBlogPostService, BlogPostService>();
         }
@@ -45,11 +55,11 @@ namespace NetCoreAngularCRUDApp
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
