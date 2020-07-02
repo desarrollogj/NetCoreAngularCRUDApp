@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using NetCoreAngularCRUDApp.Data;
 using NetCoreAngularCRUDApp.Service;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace NetCoreAngularCRUDApp
 {
@@ -33,6 +27,10 @@ namespace NetCoreAngularCRUDApp
             services.AddDbContext<NetCoreAngularCRUDAppContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("NetCoreAngularCRUDAppContext")));
 
+            // Dependency injection
+            services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+            services.AddScoped<IBlogPostService, BlogPostService>();
+
             // CORS
             services.AddCors(options =>
             {
@@ -42,9 +40,11 @@ namespace NetCoreAngularCRUDApp
                         .AllowAnyHeader());
             });
 
-            // Dependency injection
-            services.AddScoped<IBlogPostRepository, BlogPostRepository>();
-            services.AddScoped<IBlogPostService, BlogPostService>();
+            // Angular
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,15 +55,35 @@ namespace NetCoreAngularCRUDApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("CorsPolicy");
+            app.UseStaticFiles();
 
-            app.UseHttpsRedirection();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
+
+            // CORS
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                   name: "default",
+                   pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            // Angular Spa support
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }
