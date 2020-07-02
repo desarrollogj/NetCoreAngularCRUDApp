@@ -20,7 +20,7 @@ export class BlogPostService {
 
   constructor(private http: HttpClient) { 
     this.appUrl = environment.appUrl;
-    this.apiUrl = 'api/blogposts';
+    this.apiUrl = 'api/blogpost';
     this.retries = 3;
   }
 

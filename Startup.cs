@@ -28,7 +28,9 @@ namespace NetCoreAngularCRUDApp
                     options.UseSqlServer(Configuration.GetConnectionString("NetCoreAngularCRUDAppContext")));
 
             // Dependency injection
+            services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
             services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+            services.AddScoped<IBlogCategoryService, BlogCategoryService>();
             services.AddScoped<IBlogPostService, BlogPostService>();
 
             // CORS
@@ -60,6 +62,12 @@ namespace NetCoreAngularCRUDApp
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
+            }
+
+            // Database seeding
+            if (!env.IsProduction())
+            {
+                SeedData.EnsurePopulated(app);
             }
 
             // CORS

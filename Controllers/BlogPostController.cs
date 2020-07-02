@@ -14,23 +14,23 @@ namespace NetCoreAngularCRUDApp.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogPostsController : ControllerBase
+    public class BlogPostController : ControllerBase
     {
         private readonly IBlogPostService service;
 
-        public BlogPostsController(IBlogPostService service)
+        public BlogPostController(IBlogPostService service)
         {
             this.service = service;
         }
 
-        // GET: api/BlogPosts
+        // GET: api/BlogPost
         [HttpGet]
-        public IEnumerable<BlogPost> GetBlogPost()
+        public IEnumerable<BlogPost> GetBlogPosts()
         {
             return service.GetAll();
         }
 
-        // GET: api/BlogPosts/5
+        // GET: api/BlogPost/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogPost>> GetBlogPost([FromRoute] int id)
         {
