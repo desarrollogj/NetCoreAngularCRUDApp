@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BlogPostService } from '../services/blog-post.service';
+import { BlogCategoryService } from '../services/blog-category.service';
 import { BlogPost } from '../models/blogpost';
+import { BlogCategory } from '../models/blogcategory';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-blog-post-add-edit',
@@ -15,19 +18,22 @@ export class BlogPostAddEditComponent implements OnInit {
 
   formCreator: string;
   formTitle: string;
+  formCategory: string;
   formBody: string;
   postId: number;
 
   enableCreatorEdit: boolean;
   errorMessage: any;
   existingBlogPost: BlogPost;
+  blogCategories$: Observable<BlogCategory[]>;
 
-  constructor(private blogPostService: BlogPostService, private formBuilder: FormBuilder,
+  constructor(private blogPostService: BlogPostService, private blogCategoryService: BlogCategoryService, private formBuilder: FormBuilder,
               private avRoute: ActivatedRoute, private router: Router) {
                 const idParam = 'id';
                 this.actionType = 'Add';
                 this.formCreator = 'creator';
                 this.formTitle = 'title';
+                this.formCategory = 'category';
                 this.formBody = 'body';
                 this.enableCreatorEdit = true;
 
@@ -40,12 +46,14 @@ export class BlogPostAddEditComponent implements OnInit {
                     postId: 0,
                     creator: ['', [Validators.required]],
                     title: ['', [Validators.required]],
+                    category: ['', [Validators.required]],
                     body: ['', [Validators.required]],
                   }
                 );
     }
 
   ngOnInit(): void {
+    this.loadBlogCategories();
     if (this.postId > 0) {
       this.actionType = 'Edit';
       this.enableCreatorEdit = false;
@@ -54,9 +62,14 @@ export class BlogPostAddEditComponent implements OnInit {
           this.existingBlogPost = data,
           this.form.controls[this.formCreator].setValue(data.creator),
           this.form.controls[this.formTitle].setValue(data.title),
+          this.form.controls[this.formCategory].setValue(2), // TODO: Change for value returned by blog post
           this.form.controls[this.formBody].setValue(data.body)
         ));
     }
+  }
+
+  loadBlogCategories(): void {
+    this.blogCategories$ = this.blogCategoryService.getBlogCategories();
   }
 
   save(): void {
@@ -99,5 +112,6 @@ export class BlogPostAddEditComponent implements OnInit {
 
   get creator(): AbstractControl { return this.form.get(this.formCreator); }
   get title(): AbstractControl { return this.form.get(this.formTitle); }
+  get category(): AbstractControl { return this.form.get(this.formCategory); }
   get body(): AbstractControl { return this.form.get(this.formBody); }
 }

@@ -64,7 +64,7 @@ export class BlogPostService {
       );
   }
 
-  errorHandler(error) {
+  errorHandler(error): Observable<never> {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // Get client-side error
