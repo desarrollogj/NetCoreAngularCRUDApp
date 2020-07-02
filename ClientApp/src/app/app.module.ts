@@ -9,13 +9,15 @@ import { BlogPostsComponent } from './blog-posts/blog-posts.component';
 import { BlogPostComponent } from './blog-post/blog-post.component';
 import { BlogPostAddEditComponent } from './blog-post-add-edit/blog-post-add-edit.component';
 import { BlogPostService } from './services/blog-post.service';
+import { NavMenuComponent } from './nav-menu/nav-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BlogPostsComponent,
     BlogPostComponent,
-    BlogPostAddEditComponent
+    BlogPostAddEditComponent,
+    NavMenuComponent
   ],
   imports: [
     BrowserModule,

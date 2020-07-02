@@ -5,10 +5,10 @@ import { BlogPostComponent } from './blog-post/blog-post.component';
 import { BlogPostAddEditComponent } from './blog-post-add-edit/blog-post-add-edit.component';
 
 const routes: Routes = [
-  { path: '', component: BlogPostsComponent, pathMatch: 'full' },
-  { path: 'blogpost/:id', component: BlogPostComponent },
-  { path: 'add', component: BlogPostAddEditComponent },
+  { path: '', component: BlogPostsComponent, pathMatch: 'full' }, 
+  { path: 'blogpost/add', component: BlogPostAddEditComponent },
   { path: 'blogpost/edit/:id', component: BlogPostAddEditComponent },
+  { path: 'blogpost/view/:id', component: BlogPostComponent },
   { path: '**', redirectTo: '/' }
 ];
 

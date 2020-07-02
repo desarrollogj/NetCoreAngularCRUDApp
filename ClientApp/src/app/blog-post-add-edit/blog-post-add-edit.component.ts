@@ -18,6 +18,7 @@ export class BlogPostAddEditComponent implements OnInit {
   formBody: string;
   postId: number;
 
+  enableCreatorEdit: boolean;
   errorMessage: any;
   existingBlogPost: BlogPost;
 
@@ -28,6 +29,7 @@ export class BlogPostAddEditComponent implements OnInit {
                 this.formCreator = 'creator';
                 this.formTitle = 'title';
                 this.formBody = 'body';
+                this.enableCreatorEdit = true;
 
                 if (this.avRoute.snapshot.params[idParam]) {
                   this.postId = this.avRoute.snapshot.params[idParam];
@@ -46,6 +48,7 @@ export class BlogPostAddEditComponent implements OnInit {
   ngOnInit(): void {
     if (this.postId > 0) {
       this.actionType = 'Edit';
+      this.enableCreatorEdit = false;
       this.blogPostService.getBlogPost(this.postId)
         .subscribe(data => (
           this.existingBlogPost = data,

@@ -348,3 +348,29 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+### Angular ###
+## Angular ##
+# compiled output
+ClientApp/dist/
+ClientApp/tmp/
+ClientApp/app/**/*.js
+ClientApp/app/**/*.js.map
+
+# dependencies
+ClientApp/node_modules/
+ClientApp/bower_components/
+
+
+# misc
+ClientApp/.sass-cache/
+ClientApp/connect.lock/
+ClientApp/coverage/
+ClientApp/libpeerconnection.log/
+ClientApp/npm-debug.log
+ClientApp/testem.log
+ClientApp/typings/
+
+# e2e
+ClientApp/e2e/*.js
+ClientApp/e2e/*.map

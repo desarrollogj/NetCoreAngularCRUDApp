@@ -3,7 +3,7 @@
   <div class="form-group row">
     <label class=" control-label col-md-12">Creator</label>
     <div class="col-md-12">
-        <input class="form-control" type="text" formControlName="creator">
+        <input class="form-control" type="text" formControlName="creator" [attr.disabled]="enableCreatorEdit ? null : ''" >
     </div>
     <span class="text-danger ml-3" *ngIf="creator.invalid && formDir.submitted">
         Creator is required.
@@ -21,7 +21,7 @@
   <div class="form-group row">
     <label class="control-label col-md-12" for="Body">Body text</label>
     <div class="col-md-12">
-      <textarea class="form-control" rows="15" formControlName="body"></textarea>
+      <textarea class="form-control" rows="8" formControlName="body"></textarea>
     </div>
     <span class="text-danger ml-3" *ngIf="body.invalid && formDir.submitted">
       Body is required.
