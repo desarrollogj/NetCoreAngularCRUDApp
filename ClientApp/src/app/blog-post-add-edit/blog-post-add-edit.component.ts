@@ -62,7 +62,7 @@ export class BlogPostAddEditComponent implements OnInit {
           this.existingBlogPost = data,
           this.form.controls[this.formCreator].setValue(data.creator),
           this.form.controls[this.formTitle].setValue(data.title),
-          this.form.controls[this.formCategory].setValue(2), // TODO: Change for value returned by blog post
+          this.form.controls[this.formCategory].setValue(data.categoryId),
           this.form.controls[this.formBody].setValue(data.body)
         ));
     }
@@ -82,6 +82,7 @@ export class BlogPostAddEditComponent implements OnInit {
         dt: new Date(),
         creator: this.form.get(this.formCreator).value,
         title: this.form.get(this.formTitle).value,
+        categoryId: +this.form.get(this.formCategory).value,
         body: this.form.get(this.formBody).value
       };
 
@@ -97,8 +98,10 @@ export class BlogPostAddEditComponent implements OnInit {
         dt: this.existingBlogPost.dt,
         creator: this.existingBlogPost.creator,
         title: this.form.get(this.formTitle).value,
+        categoryId: +this.form.get(this.formCategory).value,
         body: this.form.get(this.formBody).value
       };
+
       this.blogPostService.updateBlogPost(blogPost.postId, blogPost)
         .subscribe((data) => {
           this.router.navigate(['/blogposts']);

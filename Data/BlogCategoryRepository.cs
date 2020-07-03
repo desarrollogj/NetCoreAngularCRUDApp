@@ -14,10 +14,14 @@ namespace NetCoreAngularCRUDApp.Data
         {
             this.context = context;
         }
-
         public IEnumerable<BlogCategory> GetAll()
         {
             return this.context.BlogCategory.AsEnumerable();
         }
+        public BlogCategory Get(int id)
+        {
+            return this.context.BlogCategory.Find(id);
+        }
+
     }
 }

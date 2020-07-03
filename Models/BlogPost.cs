@@ -8,6 +8,8 @@ namespace NetCoreAngularCRUDApp.Models
 		[Key]
 		public int PostId { get; set; }
 		[Required]
+		public BlogCategory Category { get; set; }
+		[Required]
 		public string Creator { get; set; }
 		[Required]
 		public string Title { get; set; }

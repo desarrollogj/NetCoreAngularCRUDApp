@@ -3,7 +3,11 @@
     <div>{{ blogPost.body }}</div>
     <ul>
       <li>{{ blogPost.creator }}</li>
+      <li>{{ blogPost.categoryName }}</li>
       <li>{{ blogPost.dt }}</li>
     </ul>
+    <div>
+      <button class="btn btn-secondary float-right" (click)="cancel()">Back</button>
+    </div>
   </ng-container>
   <ng-template #loading>Loading…</ng-template>

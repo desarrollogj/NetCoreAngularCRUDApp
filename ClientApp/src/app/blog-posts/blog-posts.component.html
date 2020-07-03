@@ -8,6 +8,7 @@
     <tr>
       <th>#</th>
       <th>Title</th>
+      <th>Category</th>
       <th>Creator</th>
       <th>Date</th>
       <th></th>
@@ -19,6 +20,7 @@
     <tr *ngFor="let blogPost of (blogPosts$ | async)">
       <td>{{ blogPost.postId }}</td>
       <td><a [routerLink]="['/blogpost/view', blogPost.postId]">{{ blogPost.title }}</a></td>
+      <td>{{ blogPost.categoryName }}</td>
       <td>{{ blogPost.creator }}</td>
       <td>{{ blogPost.dt | date: "dd.MM.y" }}</td>
       <td><a [routerLink]="['/blogpost/view/', blogPost.postId]" class="btn btn-primary btn-sm float-right">View</a></td>

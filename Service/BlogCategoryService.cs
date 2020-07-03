@@ -17,5 +17,10 @@ namespace NetCoreAngularCRUDApp.Service
         {
             return repo.GetAll();
         }
+
+        public BlogCategory Get(int id)
+        {
+            return repo.Get(id);
+        }
     }
 }

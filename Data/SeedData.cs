@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 
 namespace NetCoreAngularCRUDApp.Data
 {
@@ -27,9 +28,11 @@ namespace NetCoreAngularCRUDApp.Data
 
                 if (!context.BlogPost.Any())
                 {
+                    var categoryAlpha = context.BlogCategory.First(p => p.Name == "Category Alpha");
+
                     context.BlogPost.AddRange(
-                        new Models.BlogPost { Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now },
-                        new Models.BlogPost { Creator = "User Two", Title = "Otra publicación", Body = "Probando el blog", Dt = DateTime.Now }
+                        new Models.BlogPost { Category = categoryAlpha, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now },
+                        new Models.BlogPost { Category = categoryAlpha, Creator = "User Two", Title = "Otra publicación", Body = "Probando el blog", Dt = DateTime.Now }
                     );
 
                     context.SaveChanges();
