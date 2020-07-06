@@ -16,11 +16,11 @@ namespace NetCoreAngularCRUDApp.Data
         }
         public IEnumerable<BlogCategory> GetAll()
         {
-            return this.context.BlogCategory.AsEnumerable();
+            return this.context.BlogCategories.AsEnumerable();
         }
         public BlogCategory Get(int id)
         {
-            return this.context.BlogCategory.Find(id);
+            return this.context.BlogCategories.Find(id);
         }
 
     }

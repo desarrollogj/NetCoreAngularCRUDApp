@@ -16,21 +16,21 @@ namespace NetCoreAngularCRUDApp.Data
         }
         public IEnumerable<BlogPost> GetAll()
         {
-            return context.BlogPost
+            return context.BlogPosts
                 .Include("Category")
                 .OrderByDescending(p => p.PostId).AsEnumerable();  
         }
 
         public BlogPost Get(int id)
         {
-            return context.BlogPost
+            return context.BlogPosts
                 .Include("Category")
                 .FirstOrDefault(p => p.PostId == id);
         }
 
         public async Task<BlogPost> GetAsync(int id)
         {
-            return await context.BlogPost
+            return await context.BlogPosts
                 .Include("Category")
                 .FirstOrDefaultAsync(p => p.PostId == id);
         }

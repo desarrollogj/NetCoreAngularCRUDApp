@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetCoreAngularCRUDApp.Data;
 using NetCoreAngularCRUDApp.Models;
 using NetCoreAngularCRUDApp.Models.ViewModels;
 using NetCoreAngularCRUDApp.Service;
@@ -52,7 +49,7 @@ namespace NetCoreAngularCRUDApp.Controllers
             return new BlogPostViewModel(blogPost);
         }
 
-        // POST: api/BlogPosts
+        // POST: api/BlogPost
         [HttpPost]
         public ActionResult<BlogPost> PostBlogPost(BlogPostViewModel blogPost)
         {
@@ -82,7 +79,7 @@ namespace NetCoreAngularCRUDApp.Controllers
             return CreatedAtAction("GetBlogPost", new { id = blogPost.PostId }, blogPost);
         }
 
-        // PUT: api/BlogPosts/5
+        // PUT: api/BlogPost/5
         [HttpPut("{id}")]
         public IActionResult PutBlogPost(int id, BlogPostViewModel blogPost)
         {
@@ -132,7 +129,7 @@ namespace NetCoreAngularCRUDApp.Controllers
             return NoContent();
         }
 
-        // DELETE: api/BlogPosts/5
+        // DELETE: api/BlogPost/5
         [HttpDelete("{id}")]
         public ActionResult<BlogPostViewModel> DeleteBlogPost(int id)
         {

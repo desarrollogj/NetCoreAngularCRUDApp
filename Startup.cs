@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using NetCoreAngularCRUDApp.Data;
 using NetCoreAngularCRUDApp.Service;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using NetCoreAngularCRUDApp.Models;
+using NetCoreAngularCRUDApp.Migrations;
 
 namespace NetCoreAngularCRUDApp
 {
@@ -32,6 +34,12 @@ namespace NetCoreAngularCRUDApp
             services.AddScoped<IBlogPostRepository, BlogPostRepository>();
             services.AddScoped<IBlogCategoryService, BlogCategoryService>();
             services.AddScoped<IBlogPostService, BlogPostService>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
 
             // CORS
             services.AddCors(options =>

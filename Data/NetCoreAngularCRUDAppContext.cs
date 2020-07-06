@@ -13,7 +13,12 @@ namespace NetCoreAngularCRUDApp.Data
             : base(options) {
         }
 
-        public DbSet<BlogPost> BlogPost { get; set; }
-        public DbSet<BlogCategory> BlogCategory { get; set; }
+        public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<BlogCategory> BlogCategories { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
