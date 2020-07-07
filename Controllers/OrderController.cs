@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NetCoreAngularCRUDApp.Models;
@@ -21,6 +22,15 @@ namespace NetCoreAngularCRUDApp.Controllers
             this.orderService = orderService;
             this.customerService = customerService;
             this.itemService = itemService;
+        }
+
+        // GET: api/Order/
+        [HttpGet]
+        public IEnumerable<OrderGETViewModel> GetOrders()
+        {
+            return orderService.GetAll()
+                .OrderByDescending(p => p.OrderId)
+                .Select(p => new OrderGETViewModel(p));
         }
 
         // GET: api/Order/5
@@ -46,6 +56,8 @@ namespace NetCoreAngularCRUDApp.Controllers
                 return BadRequest();
             }
 
+            //TODO: The creation of the order object could be placed into the service
+            //An exception handling should be required when the object could not be created
             var customer = customerService.Get(orderVm.CustomerId);
             if (customer == null) 
             {
@@ -56,7 +68,8 @@ namespace NetCoreAngularCRUDApp.Controllers
             {
                 Customer = customer,
                 PaymentType = orderVm.PaymentType,
-                Items = new List<OrderItem>()
+                Items = new List<OrderItem>(),
+                Date = DateTime.Now
             };
 
             if (orderVm.Items.Count == 0)

@@ -1,0 +1,23 @@
+<h1>Orders</h1>
+<p *ngIf="!(orders$ | async)"><em>Loading...</em></p>
+<p>
+  <a [routerLink]="['/order/add']" class="btn btn-primary float-right mb-3">New order</a>
+</p>
+<table class="table table-sm table-hover" *ngIf="(orders$ | async)?.length>0">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Customer</th>
+      <th>Payment Type</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of (orders$ | async)">
+      <td>{{ order.orderId }}</td>
+      <td>{{ order.customerName }}</td>
+      <td>{{ order.paymentType }}</td>
+      <td>{{ order.date | date: "dd.MM.y" }}</td>
+    </tr>
+  </tbody>
+</table>

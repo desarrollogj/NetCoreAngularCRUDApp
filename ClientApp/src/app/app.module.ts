@@ -10,6 +10,7 @@ import { BlogPostComponent } from './blog-post/blog-post.component';
 import { BlogPostAddEditComponent } from './blog-post-add-edit/blog-post-add-edit.component';
 import { BlogPostService } from './services/blog-post.service';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     BlogPostsComponent,
     BlogPostComponent,
     BlogPostAddEditComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,7 +16,8 @@ namespace NetCoreAngularCRUDApp.Models
         [Required]
         [Column(TypeName = "decimal(15, 2)")]
         public decimal Total { get; set; }
-
+        [Required]
+        public DateTime Date { get; set; }
         public ICollection<OrderItem> Items { get; set; }
     }
 }

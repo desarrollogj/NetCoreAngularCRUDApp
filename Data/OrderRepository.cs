@@ -32,7 +32,9 @@ namespace NetCoreAngularCRUDApp.Data
 
         public IEnumerable<Order> GetAll()
         {
-            return context.Orders.AsEnumerable();
+            return context.Orders
+                .Include(p => p.Customer)
+                .AsEnumerable();
         }
 
         public void Save()
