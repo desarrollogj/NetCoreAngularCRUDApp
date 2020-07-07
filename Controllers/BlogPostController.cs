@@ -51,7 +51,7 @@ namespace NetCoreAngularCRUDApp.Controllers
 
         // POST: api/BlogPost
         [HttpPost]
-        public ActionResult<BlogPost> PostBlogPost(BlogPostViewModel blogPost)
+        public ActionResult<BlogPostViewModel> PostBlogPost(BlogPostViewModel blogPost)
         {
             if (blogPost == null)
             {
@@ -76,7 +76,7 @@ namespace NetCoreAngularCRUDApp.Controllers
 
             postService.Add(post);
 
-            return CreatedAtAction("GetBlogPost", new { id = blogPost.PostId }, blogPost);
+            return CreatedAtAction("GetBlogPost", new { id = post.PostId }, new BlogPostViewModel(post));
         }
 
         // PUT: api/BlogPost/5
