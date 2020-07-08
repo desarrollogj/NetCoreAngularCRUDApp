@@ -1,14 +1,16 @@
 ﻿using Moq;
-using NetCoreAngularCRUDApp.Data;
+using NetCoreAngularCRUDApp.Controllers;
 using NetCoreAngularCRUDApp.Models;
 using NetCoreAngularCRUDApp.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Xunit;
 
-namespace NetCoreAngularCRUDTest.UnitTests.Service
+namespace NetCoreAngularCRUDTest.UnitTests.Controllers
 {
-    public class BlogCategoryServiceTests
+    public class BlogCategoryControllerTests
     {
         [Fact]
         public void WhenGetAll_ReturnResult()
@@ -18,14 +20,15 @@ namespace NetCoreAngularCRUDTest.UnitTests.Service
             responseMock.Add(new BlogCategory { Name = "Category Beta" });
             responseMock.Add(new BlogCategory { Name = "Category Gamma" });
 
-            var persistenceMock = new Mock<IBlogCategoryRepository>();
-            persistenceMock.Setup(p => p.GetAll()).Returns(responseMock);
+            var serviceMock = new Mock<IBlogCategoryService>();
+            serviceMock.Setup(p => p.GetAll()).Returns(responseMock);
 
-            var service = new BlogCategoryService(persistenceMock.Object);
-            var categories = service.GetAll();
+            var controller = new BlogCategoryController(serviceMock.Object);
+
+            var categories = controller.GetBlogCategories();
 
             Assert.NotNull(categories);
-            Assert.Equal(3, categories.ToList().Count);
+            Assert.Equal(3, categories.Count());
         }
     }
 }
