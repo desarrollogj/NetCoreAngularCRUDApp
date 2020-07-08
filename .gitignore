@@ -374,3 +374,4 @@ ClientApp/typings/
 # e2e
 ClientApp/e2e/*.js
 ClientApp/e2e/*.map
+NetCoreAngularCRUDTest/coverage.json
