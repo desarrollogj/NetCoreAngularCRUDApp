@@ -76,5 +76,47 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
             Assert.Equal("My first post", returnedPost.Title);
             Assert.Equal("Hello!", returnedPost.Body);
         }
+
+        [Fact]
+        public void GivenABlogPost_WhenPut_ReturnResult()
+        {
+            var postServiceMock = new Mock<IBlogPostService>();
+            postServiceMock.Setup(p => p.Update(It.IsAny<BlogPost>()));
+
+            var categoryMock = new BlogCategory { CategoryId = 1, Name = "Category Alpha" };
+            var categoryServiceMock = new Mock<IBlogCategoryService>();
+            categoryServiceMock.Setup(p => p.Get(1)).Returns(categoryMock);
+
+            var putData = new BlogPostViewModel { PostId = 1, CategoryId = 1, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now };
+
+            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var result = controller.PutBlogPost(1, putData);
+
+            Assert.NotNull(result);
+            var noContentResult = Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public void GivenABlogPost_WhenDelete_ReturnResult()
+        {
+            var deleteData = new BlogPost { PostId = 1, Category = new BlogCategory { CategoryId = 1, Name = "Category Alpha" }, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now };
+
+            var postServiceMock = new Mock<IBlogPostService>();
+            postServiceMock.Setup(p => p.Delete(It.IsAny<BlogPost>()));
+            postServiceMock.Setup(p => p.Get(1)).Returns(deleteData);
+
+            var categoryServiceMock = new Mock<IBlogCategoryService>();
+
+            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var result = controller.DeleteBlogPost(1);
+
+            Assert.NotNull(result);
+            var actionResult = Assert.IsType<ActionResult<BlogPostViewModel>>(result);
+            var returnedDelete = Assert.IsType<BlogPostViewModel>(actionResult.Value);
+
+            Assert.Equal(1, returnedDelete.PostId);
+            Assert.Equal("My first post", returnedDelete.Title);
+            Assert.Equal("Hello!", returnedDelete.Body);
+        }
     }
 }
