@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Castle.Core.Logging;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NetCoreAngularCRUDApp.Controllers;
 using NetCoreAngularCRUDApp.Models;
@@ -7,6 +9,7 @@ using NetCoreAngularCRUDApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -22,11 +25,12 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
             responseMock.Add(new BlogPost { PostId = 1, Category = new BlogCategory { CategoryId = 1, Name = "Category Alpha" }, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now });
             responseMock.Add(new BlogPost { PostId = 2, Category = new BlogCategory { CategoryId = 2, Name = "Category Beta" }, Creator = "User Two", Title = "Otra publicación", Body = "Probando el blog", Dt = DateTime.Now });
 
+            var loggerMock = new Mock<ILogger<BlogPostController>>();
             var postServiceMock = new Mock<IBlogPostService>();
             postServiceMock.Setup(p => p.GetAll()).Returns(responseMock);
             var categoryServiceMock = new Mock<IBlogCategoryService>();
 
-            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var controller = new BlogPostController(loggerMock.Object, postServiceMock.Object, categoryServiceMock.Object);
             var posts = controller.GetBlogPosts();
 
             Assert.NotNull(posts);
@@ -36,12 +40,13 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
         [Fact]
         public async void WhenGetBlogPost_ReturnResult()
         {
+            var loggerMock = new Mock<ILogger<BlogPostController>>();
             var postMock = new BlogPost { PostId = 1, Category = new BlogCategory { CategoryId = 1, Name = "Category Alpha" }, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now };
             var postServiceMock = new Mock<IBlogPostService>();
             postServiceMock.Setup(p => p.GetAsync(1)).Returns(Task.FromResult(postMock));
             var categoryServiceMock = new Mock<IBlogCategoryService>();
 
-            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var controller = new BlogPostController(loggerMock.Object, postServiceMock.Object, categoryServiceMock.Object);
             var post = await controller.GetBlogPost(1);
 
             Assert.NotNull(post);
@@ -54,8 +59,28 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
         }
 
         [Fact]
+        public async void WhenGetBlogPost_AndNotExists_ReturnNull()
+        {
+            var loggerMock = new Mock<ILogger<BlogPostController>>();
+            var postServiceMock = new Mock<IBlogPostService>();
+            postServiceMock.Setup(p => p.GetAsync(1)).Returns(Task.FromResult<BlogPost>(null));
+            var categoryServiceMock = new Mock<IBlogCategoryService>();
+
+            var controller = new BlogPostController(loggerMock.Object, postServiceMock.Object, categoryServiceMock.Object);
+            var post = await controller.GetBlogPost(1);
+
+            Assert.NotNull(post);
+            var actionResult = Assert.IsType<ActionResult<BlogPostViewModel>>(post);
+            var returnedMessage = Assert.IsType<NotFoundResult>(actionResult.Result);
+
+            Assert.Equal((int)HttpStatusCode.NotFound, returnedMessage.StatusCode);
+        }
+
+        [Fact]
         public void GivenABlogPost_WhenPost_ReturnResult()
         {
+            var loggerMock = new Mock<ILogger<BlogPostController>>();
+
             var postServiceMock = new Mock<IBlogPostService>();
             postServiceMock.Setup(p => p.Add(It.IsAny<BlogPost>()));
 
@@ -65,7 +90,7 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
 
             var postData = new BlogPostViewModel { CategoryId = 1, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now };
 
-            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var controller = new BlogPostController(loggerMock.Object, postServiceMock.Object, categoryServiceMock.Object);
             var post = controller.PostBlogPost(postData);
 
             Assert.NotNull(post);
@@ -80,6 +105,8 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
         [Fact]
         public void GivenABlogPost_WhenPut_ReturnResult()
         {
+            var loggerMock = new Mock<ILogger<BlogPostController>>();
+
             var postServiceMock = new Mock<IBlogPostService>();
             postServiceMock.Setup(p => p.Update(It.IsAny<BlogPost>()));
 
@@ -89,7 +116,7 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
 
             var putData = new BlogPostViewModel { PostId = 1, CategoryId = 1, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now };
 
-            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var controller = new BlogPostController(loggerMock.Object, postServiceMock.Object, categoryServiceMock.Object);
             var result = controller.PutBlogPost(1, putData);
 
             Assert.NotNull(result);
@@ -101,13 +128,14 @@ namespace NetCoreAngularCRUDTest.UnitTests.Controllers
         {
             var deleteData = new BlogPost { PostId = 1, Category = new BlogCategory { CategoryId = 1, Name = "Category Alpha" }, Creator = "User One", Title = "My first post", Body = "Hello!", Dt = DateTime.Now };
 
+            var loggerMock = new Mock<ILogger<BlogPostController>>();
             var postServiceMock = new Mock<IBlogPostService>();
             postServiceMock.Setup(p => p.Delete(It.IsAny<BlogPost>()));
             postServiceMock.Setup(p => p.Get(1)).Returns(deleteData);
 
             var categoryServiceMock = new Mock<IBlogCategoryService>();
 
-            var controller = new BlogPostController(postServiceMock.Object, categoryServiceMock.Object);
+            var controller = new BlogPostController(loggerMock.Object, postServiceMock.Object, categoryServiceMock.Object);
             var result = controller.DeleteBlogPost(1);
 
             Assert.NotNull(result);

@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NetCoreAngularCRUDApp.Models;
 using NetCoreAngularCRUDApp.Models.ViewModels;
 using NetCoreAngularCRUDApp.Service;
+using NLog.Fluent;
 
 namespace NetCoreAngularCRUDApp.Controllers
 {
@@ -14,11 +16,13 @@ namespace NetCoreAngularCRUDApp.Controllers
     [ApiController]
     public class BlogPostController : ControllerBase
     {
+        private readonly ILogger<BlogPostController> logger;
         private readonly IBlogPostService postService;
         private readonly IBlogCategoryService categoryService;
 
-        public BlogPostController(IBlogPostService postService, IBlogCategoryService categoryService)
+        public BlogPostController(ILogger<BlogPostController> logger, IBlogPostService postService, IBlogCategoryService categoryService)
         {
+            this.logger = logger;
             this.postService = postService;
             this.categoryService = categoryService;
         }
@@ -43,6 +47,7 @@ namespace NetCoreAngularCRUDApp.Controllers
 
             if (blogPost == null)
             {
+                logger.LogDebug("Blog post {Id} not found", id);
                 return NotFound();
             }
 
@@ -55,6 +60,7 @@ namespace NetCoreAngularCRUDApp.Controllers
         {
             if (blogPost == null)
             {
+                logger.LogDebug("Received a null content");
                 return BadRequest();
             }
 
@@ -62,6 +68,7 @@ namespace NetCoreAngularCRUDApp.Controllers
 
             if (category == null)
             {
+                logger.LogDebug("Category {Id} not found", blogPost.CategoryId);
                 return BadRequest("Category not found");
             }
 
@@ -85,11 +92,13 @@ namespace NetCoreAngularCRUDApp.Controllers
         {
             if (blogPost == null)
             {
+                logger.LogDebug("Received a null content");
                 return BadRequest();
             }
 
             if (id != blogPost.PostId)
             {
+                logger.LogDebug("Body PostId mismatch. Expected {Expected}, Received {Received}", id, blogPost.PostId);
                 return BadRequest("Body PostId mismatch");
             }
 
@@ -97,6 +106,7 @@ namespace NetCoreAngularCRUDApp.Controllers
 
             if (category == null)
             {
+                logger.LogDebug("Category {Id} not found", blogPost.CategoryId);
                 return BadRequest("Category not found");
             }
 
@@ -114,14 +124,16 @@ namespace NetCoreAngularCRUDApp.Controllers
             {
                 postService.Update(post);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!BlogPostExists(id))
                 {
+                    logger.LogDebug("Blog post id {Id} not found", id);
                     return NotFound();
                 }
                 else
                 {
+                    logger.LogError(ex, "Unexpected exception when try to update Blog post id {Id}", id);
                     throw;
                 }
             }
@@ -136,6 +148,7 @@ namespace NetCoreAngularCRUDApp.Controllers
             var blogPost = postService.Get(id);
             if (blogPost == null)
             {
+                logger.LogDebug("Blog post id {Id} not found", id);
                 return NotFound();
             }
 

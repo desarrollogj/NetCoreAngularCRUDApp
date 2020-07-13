@@ -14,11 +14,7 @@ namespace NetCoreAngularCRUDApp.Data
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<NetCoreAngularCRUDAppContext>();
-                
-                if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-                {
-                    context.Database.Migrate();
-                }
+                context.Database.Migrate();
 
                 if (!context.BlogCategories.Any())
                 {
