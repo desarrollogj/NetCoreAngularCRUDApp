@@ -126,7 +126,7 @@ namespace NetCoreAngularCRUDTest.IntegrationTests.Controllers
                         }
                         catch (Exception ex)
                         {
-                            logger.LogError(ex, "An error occurred seeding " + " the database. Error: {Message}", ex.Message);
+                            logger.LogError(ex, "An error occurred seeding the database. Error: {Message}", ex.Message);
                         }
                     }
                 });
